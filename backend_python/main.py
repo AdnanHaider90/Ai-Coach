@@ -25,6 +25,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost",
+    "https://aicoach-opal.vercel.app",
 ]
 
 app.add_middleware(
