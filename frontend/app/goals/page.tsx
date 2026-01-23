@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createSupabaseClient } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { GoalCard } from "@/components/GoalCard";
-import { createGoal } from "@/lib/api";
 import { useRouter } from "next/navigation";
 
 type GoalInput = {
@@ -13,7 +12,6 @@ type GoalInput = {
 };
 
 export default function GoalsPage() {
-  const supabase = createSupabaseClient();
   const router = useRouter();
   const [goals, setGoals] = useState<any[]>([]);
   const [form, setForm] = useState<GoalInput>({
@@ -42,7 +40,7 @@ export default function GoalsPage() {
   const submitGoal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) return;
-    await createGoal({
+    await supabase.from("Goal").insert({
       userId,
       title: form.title,
       description: form.description,
