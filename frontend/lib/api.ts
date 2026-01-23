@@ -1,6 +1,40 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
 
+/* -------------------------------------------------
+   Goals API  ✅ (FIXES YOUR VERCEL ERROR)
+-------------------------------------------------- */
+
+// ✅ CREATE goal (this was missing)
+export const createGoal = async (
+  token: string,
+  payload: {
+    title: string;
+    description?: string;
+    deadline?: string;
+  }
+) => {
+  const res = await fetch(`${API_BASE}/goals`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Failed to create goal");
+  }
+
+  return res.json();
+};
+
+/* -------------------------------------------------
+   Sessions API
+-------------------------------------------------- */
+
 // ✅ GET sessions
 export const fetchSessions = async (token: string) => {
   const res = await fetch(`${API_BASE}/sessions`, {
@@ -18,10 +52,7 @@ export const fetchSessions = async (token: string) => {
 };
 
 // ✅ CREATE session
-export const createSession = async (
-  token: string,
-  coachType: string
-) => {
+export const createSession = async (token: string, coachType: string) => {
   const res = await fetch(`${API_BASE}/sessions`, {
     method: "POST",
     headers: {
@@ -63,6 +94,7 @@ export const postChat = async (
 
   return res.json();
 };
+
 // ✅ GET messages
 export const fetchMessages = async (token: string, sessionId: string) => {
   const res = await fetch(`${API_BASE}/messages?sessionId=${sessionId}`, {
